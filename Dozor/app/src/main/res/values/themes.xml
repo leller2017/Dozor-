@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Dozor" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/amber</item>
+        <item name="colorOnPrimary">#1A1200</item>
+        <item name="colorPrimaryContainer">#3A2A00</item>
+        <item name="colorOnPrimaryContainer">@color/amber</item>
+        <item name="colorSecondary">@color/amber_dark</item>
+        <item name="colorOnSecondary">#1A1200</item>
+        <item name="colorSecondaryContainer">@color/surface2</item>
+        <item name="colorOnSecondaryContainer">@color/text</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text</item>
+        <item name="colorSurfaceVariant">@color/surface2</item>
+        <item name="colorOnSurfaceVariant">@color/text_dim</item>
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorError">@color/red</item>
+        <item name="android:colorBackground">@color/bg</item>
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:navigationBarColor">@color/bg</item>
+    </style>
+
+    <style name="Theme.Dozor.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Dozor.Alarm" parent="Theme.Dozor.NoActionBar">
+        <item name="android:windowBackground">#1A0E00</item>
+        <item name="android:statusBarColor">#1A0E00</item>
+    </style>
+
+    <style name="Dozor.Label" parent="">
+        <item name="android:textColor">@color/text_dim</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="Dozor.Section" parent="">
+        <item name="android:textColor">@color/amber</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+</resources>

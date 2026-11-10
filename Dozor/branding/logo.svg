@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 108" width="1260" height="324">
+<rect width="420" height="108" rx="20" fill="#0E1116"/>
+<g><path d="M18,54 a36,36 0 1,0 72,0 a36,36 0 1,0 -72,0 M30,54 a24,24 0 1,0 48,0 a24,24 0 1,0 -48,0 M54,10 L54,98 M10,54 L98,54" stroke="#1B222B" stroke-width="1" fill="none"/>
+<path d="M76.22,35.36 A29,29 0 0,1 76.22,72.64 M31.78,72.64 A29,29 0 0,1 31.78,35.36" stroke="#FFB300" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round" fill="none"/>
+<path d="M71.62,39.22 A23,23 0 0,1 71.62,68.78 M36.38,68.78 A23,23 0 0,1 36.38,39.22" stroke="#FFB300" stroke-opacity="0.85" stroke-width="3" stroke-linecap="round" fill="none"/>
+<path d="M39,54 Q54,38 69,54 Q54,70 39,54 Z" stroke="#FFB300" stroke-width="3" stroke-linejoin="round" fill="#1A1406"/>
+<circle cx="54" cy="54" r="6.5" fill="#FFB300"/><circle cx="54" cy="54" r="2.6" fill="#0E1116"/><circle cx="56.8" cy="51.6" r="1.2" fill="#FFF4D6"/></g>
+<text x="112" y="66" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="44" letter-spacing="9" fill="#FFB300">ДОЗОР</text>
+<text x="114" y="88" font-family="DejaVu Sans, Arial, sans-serif" font-size="13" letter-spacing="2" fill="#8B949E">СТОРОЖ ВИДЕОНАБЛЮДЕНИЯ</text>
+</svg>

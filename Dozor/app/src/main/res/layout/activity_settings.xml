@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="32dp">
+
+        <!-- ДЕТЕКЦИЯ -->
+        <TextView style="@style/Dozor.Section" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/s_detection" />
+
+        <TextView android:id="@+id/sensLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/text" android:textSize="16sp" />
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sensSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="1"
+            android:valueFrom="0"
+            android:valueTo="100" />
+
+        <TextView android:id="@+id/confirmLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/text" android:textSize="16sp" />
+        <com.google.android.material.slider.Slider
+            android:id="@+id/confirmSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="1"
+            android:valueFrom="1"
+            android:valueTo="8" />
+        <TextView style="@style/Dozor.Label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/s_confirm_hint" />
+
+        <TextView android:id="@+id/fpsLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:textColor="@color/text" android:textSize="16sp" />
+        <com.google.android.material.slider.Slider
+            android:id="@+id/fpsSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="1"
+            android:valueFrom="2"
+            android:valueTo="5" />
+        <TextView style="@style/Dozor.Label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/s_fps_hint" />
+
+        <!-- ТРЕВОГА -->
+        <TextView style="@style/Dozor.Section" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/s_alarm" />
+
+        <TextView android:id="@+id/cooldownLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/text" android:textSize="16sp" />
+        <com.google.android.material.slider.Slider
+            android:id="@+id/cooldownSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="5"
+            android:valueFrom="5"
+            android:valueTo="600" />
+
+        <TextView android:id="@+id/shotsLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/text" android:textSize="16sp" />
+        <com.google.android.material.slider.Slider
+            android:id="@+id/shotsSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="1"
+            android:valueFrom="3"
+            android:valueTo="5" />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/s_sound" android:textColor="@color/text" android:textSize="16sp" />
+        <TextView android:id="@+id/soundName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/amber" android:textSize="15sp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/soundChoose"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/s_sound_choose" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/soundTest"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="@string/s_sound_test" />
+        </LinearLayout>
+
+        <TextView android:id="@+id/durationLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:textColor="@color/text" android:textSize="16sp" />
+        <com.google.android.material.slider.Slider
+            android:id="@+id/durationSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="5"
+            android:valueFrom="5"
+            android:valueTo="120" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/maxVolumeSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s_max_volume"
+            android:textColor="@color/text"
+            android:textSize="15sp" />
+
+        <!-- ТИХИЕ ЧАСЫ -->
+        <TextView style="@style/Dozor.Section" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/s_quiet" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/quietSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s_quiet_enable"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/quietFrom"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/quietTo"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <TextView style="@style/Dozor.Label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/s_quiet_hint" />
+
+        <!-- СИСТЕМА -->
+        <TextView style="@style/Dozor.Section" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/s_system" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/batteryButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s_battery" />
+        <TextView style="@style/Dozor.Label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/s_battery_hint" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fsiButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/s_fsi" />
+    </LinearLayout>
+</ScrollView>

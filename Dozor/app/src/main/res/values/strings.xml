@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Дозор</string>
+    <string name="tagline">сторож для системы видеонаблюдения</string>
+
+    <string name="start">Начать дежурство</string>
+    <string name="stop">Стоп</string>
+    <string name="journal">Журнал</string>
+    <string name="settings">Настройки</string>
+    <string name="event">Срабатывание</string>
+
+    <string name="aim_hint">Наведите камеру телефона на монитор с камерами наблюдения. Экран телефона потом можно выключить — дежурство продолжится.</string>
+    <string name="watch_hint">Так видит сторож: янтарным подсвечены изменения</string>
+    <string name="need_camera">Нужен доступ к камере</string>
+    <string name="grant">Разрешить</string>
+
+    <string name="mode_idle">Не на посту</string>
+    <string name="mode_starting">Запуск…</string>
+    <string name="mode_warmup">Настройка камеры…</string>
+    <string name="mode_watching">На посту</string>
+    <string name="mode_alarm">ТРЕВОГА!</string>
+    <string name="mode_cooldown">На посту · пауза после тревоги</string>
+    <string name="mode_busy">Камера занята</string>
+    <string name="mode_error">Ошибка</string>
+
+    <string name="detail_idle">Нажмите «Начать дежурство», когда камера наведена.</string>
+    <string name="detail_watching">Изменение %1$.1f%% · порог %2$.1f%% · подряд %3$d из %4$d</string>
+    <string name="detail_cooldown">Повторная тревога возможна через %1$d с</string>
+    <string name="session_count">За смену: %1$d</string>
+    <string name="total_count">В журнале: %1$d</string>
+
+    <string name="duty_title">Дозор на посту</string>
+    <string name="duty_text">Наблюдаю · тревог за смену: %1$d</string>
+    <string name="duty_starting">Настраиваю камеру…</string>
+    <string name="camera_busy">Камера занята другим приложением. Жду, когда освободится…</string>
+    <string name="camera_recovering">Камера временно недоступна, переподключаюсь…</string>
+
+    <string name="err_foreground">Не удалось запустить фоновое дежурство. Откройте приложение и попробуйте снова.</string>
+    <string name="err_no_camera_permission">Нет разрешения на камеру.</string>
+    <string name="err_no_back_camera">На телефоне не найдена основная камера.</string>
+    <string name="err_camera_disabled">Камера отключена системой или политикой устройства.</string>
+    <string name="err_camera_generic">Ошибка камеры: %1$s</string>
+    <string name="preview_busy">Камера сейчас занята другим приложением. Закройте его — превью появится автоматически.</string>
+
+    <string name="ch_duty">Дежурство</string>
+    <string name="ch_duty_desc">Постоянное уведомление, пока идёт наблюдение</string>
+    <string name="ch_alarm">Тревоги</string>
+    <string name="ch_alarm_desc">Срабатывания детектора движения</string>
+    <string name="ch_alarm_quiet">Тревоги в тихие часы</string>
+    <string name="ch_alarm_quiet_desc">Срабатывания без звука</string>
+
+    <string name="alarm_title">Тревога! Движение в кадре</string>
+    <string name="alarm_title_quiet">Движение в кадре (тихие часы)</string>
+    <string name="alarm_text">%1$s · изменилось %2$.1f%% кадра</string>
+    <string name="silence">Заглушить</string>
+    <string name="open_shots">Открыть снимки</string>
+    <string name="alarm_big">ТРЕВОГА</string>
+
+    <string name="perm_camera_title">Нужна камера</string>
+    <string name="perm_camera_text">Без доступа к камере «Дозор» не может следить за монитором. Разрешите доступ в настройках приложения.</string>
+    <string name="open_settings">Открыть настройки</string>
+    <string name="cancel">Отмена</string>
+    <string name="perm_notif_denied">Уведомления запрещены — о тревоге сообщит только звук.</string>
+    <string name="fsi_hint">Разрешите «Дозору» показывать тревогу на весь экран — так она будет видна на заблокированном телефоне.</string>
+    <string name="allow">Разрешить</string>
+
+    <string name="journal_empty">Срабатываний пока не было.</string>
+    <string name="journal_item_sub">%1$d снимк. · изменение %2$.1f%%</string>
+    <string name="clear_journal">Очистить журнал</string>
+    <string name="clear_journal_q">Удалить все срабатывания и снимки?</string>
+    <string name="delete_event_q">Удалить это срабатывание?</string>
+    <string name="delete">Удалить</string>
+    <string name="shot_counter">Снимок %1$d из %2$d</string>
+    <string name="share">Поделиться</string>
+
+    <string name="s_detection">ДЕТЕКЦИЯ</string>
+    <string name="s_sensitivity">Чувствительность</string>
+    <string name="s_sensitivity_value">%1$d — %2$s</string>
+    <string name="sens_low">низкая</string>
+    <string name="sens_mid">средняя</string>
+    <string name="sens_high">высокая</string>
+    <string name="s_confirm">Защита от ложных тревог: кадров подряд</string>
+    <string name="s_confirm_hint">Чем больше, тем меньше реакций на мерцание монитора, но выше задержка.</string>
+    <string name="s_fps">Частота анализа, кадров в секунду</string>
+    <string name="s_fps_hint">Меньше — экономнее для батареи.</string>
+    <string name="s_alarm">ТРЕВОГА</string>
+    <string name="s_cooldown">Интервал между тревогами</string>
+    <string name="s_shots">Снимков в серии</string>
+    <string name="s_sound">Звук</string>
+    <string name="s_sound_builtin">Сирена «Дозора»</string>
+    <string name="s_sound_choose">Выбрать</string>
+    <string name="s_sound_test">Проверить</string>
+    <string name="s_sound_stop">Остановить</string>
+    <string name="s_sound_duration">Длительность сигнала</string>
+    <string name="s_max_volume">Поднимать громкость будильника до максимума</string>
+    <string name="s_quiet">ТИХИЕ ЧАСЫ</string>
+    <string name="s_quiet_enable">Включить тихие часы</string>
+    <string name="s_quiet_hint">В тихие часы срабатывания сохраняются в журнал и приходит уведомление, но без звука.</string>
+    <string name="s_quiet_from">С %1$s</string>
+    <string name="s_quiet_to">До %1$s</string>
+    <string name="s_system">СИСТЕМА</string>
+    <string name="s_battery">Не ограничивать в фоне (батарея)</string>
+    <string name="s_battery_hint">Рекомендуется: некоторые телефоны иначе останавливают дежурство ночью.</string>
+    <string name="s_fsi">Тревога поверх экрана блокировки</string>
+    <string name="sound_builtin_option">Сирена «Дозора» (встроенная)</string>
+    <string name="sound_system_option">Системный звук…</string>
+    <string name="seconds">%1$d с</string>
+    <string name="minutes_seconds">%1$d мин %2$d с</string>
+    <string name="minutes">%1$d мин</string>
+</resources>

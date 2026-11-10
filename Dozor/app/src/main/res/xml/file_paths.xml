@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-files-path name="events" path="Pictures/events/" />
+    <files-path name="events_internal" path="events/" />
+</paths>
