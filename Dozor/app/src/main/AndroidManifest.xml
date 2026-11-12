@@ -45,6 +45,16 @@
             android:parentActivityName=".ui.JournalActivity" />
 
         <activity
+            android:name=".ui.AimActivity"
+            android:label="@string/aim_title"
+            android:theme="@style/Theme.Dozor.NoActionBar" />
+
+        <activity
+            android:name=".ui.ScheduleActivity"
+            android:label="@string/schedule_title"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/settings"
             android:parentActivityName=".ui.MainActivity" />

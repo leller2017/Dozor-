@@ -29,6 +29,12 @@ data class DozorSettings(
     /** Минуты от полуночи. */
     val quietStartMin: Int = 8 * 60,
     val quietEndMin: Int = 20 * 60,
+    /** Обратный отсчёт перед стартом дежурства, секунды (0 — без отсчёта). */
+    val countdownSec: Int = 3,
+    /** Выбранная задняя камера (id Camera2) или null — камера по умолчанию. */
+    val cameraId: String? = null,
+    /** Масштаб: < 1 — шире (если телефон поддерживает), 1 — обычный. */
+    val zoomRatio: Float = 1f,
 ) {
     /**
      * Перевод ползунка чувствительности в параметры детектора.
@@ -70,6 +76,9 @@ class SettingsRepository(context: Context) {
         quietEnabled = prefs.getBoolean(K_QUIET, false),
         quietStartMin = prefs.getInt(K_QUIET_START, 8 * 60),
         quietEndMin = prefs.getInt(K_QUIET_END, 20 * 60),
+        countdownSec = prefs.getInt(K_COUNTDOWN, 3),
+        cameraId = prefs.getString(K_CAMERA, null),
+        zoomRatio = prefs.getFloat(K_ZOOM, 1f),
     )
 
     fun update(block: (DozorSettings) -> DozorSettings) {
@@ -86,6 +95,9 @@ class SettingsRepository(context: Context) {
             .putBoolean(K_QUIET, s.quietEnabled)
             .putInt(K_QUIET_START, s.quietStartMin)
             .putInt(K_QUIET_END, s.quietEndMin)
+            .putInt(K_COUNTDOWN, s.countdownSec)
+            .putString(K_CAMERA, s.cameraId)
+            .putFloat(K_ZOOM, s.zoomRatio)
             .apply()
     }
 
@@ -101,5 +113,8 @@ class SettingsRepository(context: Context) {
         const val K_QUIET = "quiet_enabled"
         const val K_QUIET_START = "quiet_start"
         const val K_QUIET_END = "quiet_end"
+        const val K_COUNTDOWN = "countdown_sec"
+        const val K_CAMERA = "camera_id"
+        const val K_ZOOM = "zoom_ratio"
     }
 }

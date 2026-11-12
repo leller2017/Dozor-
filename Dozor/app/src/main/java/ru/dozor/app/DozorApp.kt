@@ -4,6 +4,7 @@ import android.app.Application
 import ru.dozor.app.alert.AlertManager
 import ru.dozor.app.alert.Notifications
 import ru.dozor.app.data.EventRepository
+import ru.dozor.app.data.ScheduleRepository
 import ru.dozor.app.data.SettingsRepository
 import ru.dozor.app.publish.CloudUploader
 import ru.dozor.app.publish.EventPublisher
@@ -21,6 +22,8 @@ class DozorApp : Application() {
         private set
     lateinit var alerts: AlertManager
         private set
+    lateinit var schedule: ScheduleRepository
+        private set
 
     /**
      * Получатели событий тревоги. Сейчас — локальное уведомление со звуком.
@@ -35,6 +38,7 @@ class DozorApp : Application() {
         Notifications.createChannels(this)
         settings = SettingsRepository(this)
         events = EventRepository(this)
+        schedule = ScheduleRepository(this)
         alerts = AlertManager(this, settings)
         publishers = listOf(
             LocalAlertPublisher(alerts),

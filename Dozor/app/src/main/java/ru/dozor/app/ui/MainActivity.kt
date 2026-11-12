@@ -5,6 +5,8 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.media.AudioManager
+import android.media.ToneGenerator
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,7 +17,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.CameraState
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -29,10 +30,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.dozor.app.DozorApp
 import ru.dozor.app.R
+import ru.dozor.app.camera.CameraChoice
 import ru.dozor.app.service.WatchService
 import ru.dozor.app.service.WatchState
 import ru.dozor.app.service.WatchState.Mode
@@ -55,9 +59,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var totalCount: TextView
     private lateinit var startButton: MaterialButton
     private lateinit var stopButton: MaterialButton
+    private lateinit var countdownBox: View
+    private lateinit var countdownText: TextView
+    private lateinit var onShiftText: TextView
+
+    private var countdownJob: Job? = null
+    private var counting = false
+
+    private val aimLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+        if (res.resultCode == RESULT_OK && res.data?.getBooleanExtra(AimActivity.EXTRA_START, false) == true) {
+            requestStart()
+        }
+    }
 
     private var cameraProvider: ProcessCameraProvider? = null
     private var previewUseCase: Preview? = null
+    private var previewCamera: androidx.camera.core.Camera? = null
     private var pendingStart = false
 
     private val permissionLauncher = registerForActivityResult(
@@ -97,9 +114,19 @@ class MainActivity : AppCompatActivity() {
         totalCount = findViewById(R.id.totalCount)
         startButton = findViewById(R.id.startButton)
         stopButton = findViewById(R.id.stopButton)
+        countdownBox = findViewById(R.id.countdownBox)
+        countdownText = findViewById(R.id.countdownText)
+        onShiftText = findViewById(R.id.onShiftText)
 
         startButton.setOnClickListener { requestStart() }
-        stopButton.setOnClickListener { WatchService.stop(this) }
+        stopButton.setOnClickListener {
+            if (counting) cancelCountdown() else WatchService.stop(this)
+        }
+        findViewById<View>(R.id.aimButton).setOnClickListener { openAim() }
+        findViewById<View>(R.id.cameraCard).setOnClickListener { openAim() }
+        findViewById<View>(R.id.scheduleButton).setOnClickListener {
+            startActivity(Intent(this, ScheduleActivity::class.java))
+        }
         grantButton.setOnClickListener { permissionLauncher.launch(requiredPermissions()) }
         findViewById<View>(R.id.journalButton).setOnClickListener {
             startActivity(Intent(this, JournalActivity::class.java))
@@ -113,6 +140,14 @@ class MainActivity : AppCompatActivity() {
                 launch { WatchState.status.collect { render(it) } }
                 launch {
                     WatchState.preview.collect { bmp -> if (bmp != null) analysisView.setImageBitmap(bmp) }
+                }
+                launch {
+                    // Кто на смене по графику; обновляем при изменении графика и раз в минуту.
+                    launch { app.schedule.version.collect { renderOnShift() } }
+                    while (true) {
+                        delay(60_000)
+                        renderOnShift()
+                    }
                 }
                 launch {
                     app.events.version.collect {
@@ -134,6 +169,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
+        cancelCountdown()
         // Обязательно отвязываем превью: иначе при возврате на экран CameraX
         // отдал бы камеру активности и остановил анализ в сервисе.
         unbindPreview()
@@ -160,10 +196,67 @@ class MainActivity : AppCompatActivity() {
         doStart()
     }
 
+    /** Обратный отсчёт, чтобы успеть зафиксировать телефон, затем старт дежурства. */
     private fun doStart() {
+        if (counting || WatchState.status.value.isRunning) return
+        val seconds = app.settings.get().countdownSec
+        if (seconds <= 0) {
+            launchDuty()
+            return
+        }
+        counting = true
+        countdownJob = lifecycleScope.launch {
+            val tone = runCatching { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 80) }.getOrNull()
+            countdownBox.visibility = View.VISIBLE
+            stopButton.setText(R.string.cancel_countdown)
+            render(WatchState.status.value)
+            try {
+                for (i in seconds downTo 1) {
+                    countdownText.text = i.toString()
+                    tone?.startTone(ToneGenerator.TONE_PROP_BEEP, 150)
+                    delay(1000)
+                }
+                tone?.startTone(ToneGenerator.TONE_PROP_ACK, 250)
+                launchDuty()
+                delay(300) // даём сигналу доиграть
+            } finally {
+                tone?.release()
+                countdownBox.visibility = View.GONE
+                stopButton.setText(R.string.stop)
+                countdownJob = null
+                counting = false
+                render(WatchState.status.value)
+            }
+        }
+    }
+
+    private fun cancelCountdown() {
+        countdownJob?.cancel()
+    }
+
+    private fun launchDuty() {
         unbindPreview()
         WatchService.start(this)
         suggestFullScreenPermission()
+    }
+
+    private fun openAim() {
+        if (WatchState.status.value.isRunning) {
+            Toast.makeText(this, R.string.aim_busy_duty, Toast.LENGTH_LONG).show()
+            return
+        }
+        if (!hasPermission(Manifest.permission.CAMERA)) {
+            permissionLauncher.launch(requiredPermissions())
+            return
+        }
+        cancelCountdown()
+        aimLauncher.launch(AimActivity.intent(this))
+    }
+
+    private fun renderOnShift() {
+        val names = app.schedule.onShiftAt(System.currentTimeMillis()).joinToString(", ") { it.shortName }
+        onShiftText.visibility = if (names.isEmpty()) View.GONE else View.VISIBLE
+        onShiftText.text = getString(R.string.on_shift_now, names)
     }
 
     private fun showCameraPermissionProblem() {
@@ -211,8 +304,11 @@ class MainActivity : AppCompatActivity() {
             cameraProvider = provider
             val preview = Preview.Builder().build().also { it.setSurfaceProvider(previewView.surfaceProvider) }
             try {
-                val camera = provider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, preview)
+                val s = app.settings.get()
+                val camera = provider.bindToLifecycle(this, CameraChoice.selector(provider, s.cameraId), preview)
+                CameraChoice.applyZoom(camera, s.zoomRatio)
                 previewUseCase = preview
+                previewCamera = camera
                 camera.cameraInfo.cameraState.observe(this) { state -> onPreviewCameraState(state) }
             } catch (e: Exception) {
                 showCameraMessage(getString(R.string.err_camera_generic, e.message ?: e.javaClass.simpleName), false)
@@ -222,8 +318,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun unbindPreview() {
         val preview = previewUseCase ?: return
+        previewCamera?.cameraInfo?.cameraState?.removeObservers(this)
         runCatching { cameraProvider?.unbind(preview) }
         previewUseCase = null
+        previewCamera = null
     }
 
     private fun onPreviewCameraState(state: CameraState) {
@@ -233,6 +331,8 @@ class MainActivity : AppCompatActivity() {
             showCameraMessage(getString(R.string.preview_busy), false)
         } else if (state.type == CameraState.Type.OPEN) {
             cameraMessageBox.visibility = View.GONE
+            // Диапазон масштаба известен после открытия камеры.
+            previewCamera?.let { CameraChoice.applyZoom(it, app.settings.get().zoomRatio) }
         }
     }
 
@@ -299,7 +399,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         sessionCount.text = getString(R.string.session_count, s.sessionAlarms)
-        startButton.isEnabled = !running
-        stopButton.isEnabled = running
+        startButton.isEnabled = !running && !counting
+        stopButton.isEnabled = running || counting
     }
 }

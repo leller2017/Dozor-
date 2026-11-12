@@ -74,6 +74,13 @@ class SettingsActivity : AppCompatActivity() {
             repo.update { it.copy(fps = v) }
         }
 
+        val countdownLabel = findViewById<TextView>(R.id.countdownLabel)
+        slider(R.id.countdownSlider, s.countdownSec) { v ->
+            countdownLabel.text = getString(R.string.s_countdown) + ": " +
+                if (v == 0) getString(R.string.s_countdown_off) else getString(R.string.seconds, v)
+            repo.update { it.copy(countdownSec = v) }
+        }
+
         // --- тревога
         val cooldownLabel = findViewById<TextView>(R.id.cooldownLabel)
         slider(R.id.cooldownSlider, s.cooldownSec) { v ->

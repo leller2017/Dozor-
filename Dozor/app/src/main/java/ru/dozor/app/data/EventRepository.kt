@@ -16,6 +16,8 @@ data class AlarmEvent(
     val timestamp: Long,
     val changeRatio: Float,
     val dir: File,
+    /** Кто был на смене по графику в момент срабатывания (может быть пусто). */
+    val onShift: String = "",
 ) {
     val shots: List<File>
         get() = dir.listFiles { f -> f.name.startsWith("shot_") && f.name.endsWith(".jpg") }
@@ -41,12 +43,12 @@ class EventRepository(context: Context) {
     /** Меняется при любом изменении журнала — экраны подписываются и перечитывают список. */
     val version: StateFlow<Int> = _version
 
-    fun create(timestamp: Long, changeRatio: Float): AlarmEvent {
+    fun create(timestamp: Long, changeRatio: Float, onShift: String = ""): AlarmEvent {
         val id = ID_FORMAT.format(Date(timestamp))
         val dir = File(root, id).apply { mkdirs() }
-        File(dir, META).writeText("$timestamp;$changeRatio")
+        File(dir, META).writeText("$timestamp;$changeRatio;${onShift.replace(";", ",")}")
         notifyChanged()
-        return AlarmEvent(id, timestamp, changeRatio, dir)
+        return AlarmEvent(id, timestamp, changeRatio, dir, onShift)
     }
 
     fun list(): List<AlarmEvent> =
@@ -79,7 +81,8 @@ class EventRepository(context: Context) {
         val parts = runCatching { meta.readText().split(";") }.getOrNull()
         val ts = parts?.getOrNull(0)?.toLongOrNull() ?: dir.lastModified()
         val ratio = parts?.getOrNull(1)?.toFloatOrNull() ?: 0f
-        return AlarmEvent(dir.name, ts, ratio, dir)
+        val onShift = parts?.getOrNull(2)?.trim().orEmpty()
+        return AlarmEvent(dir.name, ts, ratio, dir, onShift)
     }
 
     private companion object {

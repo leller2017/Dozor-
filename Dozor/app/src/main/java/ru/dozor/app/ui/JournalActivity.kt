@@ -125,9 +125,9 @@ class EventAdapter(
         holder.thumb.setImageBitmap(row.thumb)
         holder.time.text = timeFmt.format(Date(ev.timestamp))
         holder.date.text = dateFmt.format(Date(ev.timestamp))
-        holder.sub.text = holder.itemView.context.getString(
-            R.string.journal_item_sub, row.shotCount, ev.changeRatio * 100
-        )
+        val ctx = holder.itemView.context
+        val sub = ctx.getString(R.string.journal_item_sub, row.shotCount, ev.changeRatio * 100)
+        holder.sub.text = if (ev.onShift.isBlank()) sub else sub + "\n" + ctx.getString(R.string.journal_on_shift, ev.onShift)
         holder.itemView.setOnClickListener { onClick(ev) }
         holder.itemView.setOnLongClickListener { onLongClick(ev); true }
     }

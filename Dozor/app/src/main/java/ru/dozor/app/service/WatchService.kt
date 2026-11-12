@@ -13,7 +13,6 @@ import android.os.SystemClock
 import android.util.Log
 import android.util.Size
 import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
 import androidx.camera.core.CameraState
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -27,6 +26,7 @@ import androidx.lifecycle.LifecycleService
 import ru.dozor.app.DozorApp
 import ru.dozor.app.R
 import ru.dozor.app.alert.Notifications
+import ru.dozor.app.camera.CameraChoice
 import ru.dozor.app.camera.FrameUtils
 import ru.dozor.app.camera.ShotWriter
 import ru.dozor.app.data.AlarmEvent
@@ -144,7 +144,7 @@ class WatchService : LifecycleService() {
         if (!running) return
         provider = p
 
-        val selector = ResolutionSelector.Builder()
+        val resolution = ResolutionSelector.Builder()
             .setAspectRatioStrategy(AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY)
             .setResolutionStrategy(
                 ResolutionStrategy(Size(1280, 720), ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER_THEN_HIGHER)
@@ -152,7 +152,7 @@ class WatchService : LifecycleService() {
             .build()
 
         val a = ImageAnalysis.Builder()
-            .setResolutionSelector(selector)
+            .setResolutionSelector(resolution)
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
             .build()
@@ -162,12 +162,16 @@ class WatchService : LifecycleService() {
         try {
             // Снимаем всё, что было привязано (в т.ч. превью главного экрана для наведения).
             p.unbindAll()
-            if (!p.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA)) {
+            val settings = app.settings.get()
+            val selector = CameraChoice.selector(p, settings.cameraId)
+            if (!p.hasCamera(selector)) {
                 fail(getString(R.string.err_no_back_camera))
                 return
             }
-            val cam = p.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, a)
+            val cam = p.bindToLifecycle(this, selector, a)
             camera = cam
+            // Тот же угол обзора, что выставлен в режиме наведения.
+            CameraChoice.applyZoom(cam, settings.zoomRatio)
             warmupUntil = SystemClock.elapsedRealtime() + WARMUP_MS
             cam.cameraInfo.cameraState.observe(this) { onCameraState(it) }
         } catch (e: Exception) {
@@ -198,6 +202,8 @@ class WatchService : LifecycleService() {
                 WatchState.update { it.copy(mode = Mode.CAMERA_BUSY, message = getString(R.string.camera_recovering)) }
             }
             state.type == CameraState.Type.OPEN -> {
+                // Диапазон масштаба известен только после открытия камеры — применяем ещё раз.
+                camera?.let { CameraChoice.applyZoom(it, app.settings.get().zoomRatio) }
                 if (cameraBusy) {
                     cameraBusy = false
                     // Сцена могла поменяться, пока камеру держал кто-то другой, — начинаем с чистого листа.
@@ -296,7 +302,10 @@ class WatchService : LifecycleService() {
     private fun startAlarm(image: ImageProxy, r: DetectionResult, wall: Long, now: Long, s: DozorSettings) {
         lastAlarmAt = now
         sessionAlarms++
-        val event = app.events.create(wall, r.changeRatio)
+        val onShift = runCatching {
+            app.schedule.onShiftAt(wall).joinToString(", ") { it.shortName }
+        }.getOrDefault("")
+        val event = app.events.create(wall, r.changeRatio, onShift)
         burstEvent = event
         burstIndex = 0
         burstTotal = s.shotsPerEvent.coerceIn(3, 5)

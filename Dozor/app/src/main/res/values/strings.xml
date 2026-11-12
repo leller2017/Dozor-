@@ -9,7 +9,7 @@
     <string name="settings">Настройки</string>
     <string name="event">Срабатывание</string>
 
-    <string name="aim_hint">Наведите камеру телефона на монитор с камерами наблюдения. Экран телефона потом можно выключить — дежурство продолжится.</string>
+    <string name="aim_hint">Наведите камеру на монитор с камерами наблюдения. Нажмите на изображение — откроется режим наведения с выбором угла обзора.</string>
     <string name="watch_hint">Так видит сторож: янтарным подсвечены изменения</string>
     <string name="need_camera">Нужен доступ к камере</string>
     <string name="grant">Разрешить</string>
@@ -107,4 +107,49 @@
     <string name="seconds">%1$d с</string>
     <string name="minutes_seconds">%1$d мин %2$d с</string>
     <string name="minutes">%1$d мин</string>
+
+    <!-- v1.1: отсчёт, наведение, график -->
+    <string name="journal_on_shift">Смена: %1$s</string>
+    <string name="cancel_countdown">Отмена</string>
+    <string name="countdown_hint">Зафиксируйте телефон — дежурство начнётся через…</string>
+    <string name="aim">Наведение</string>
+    <string name="aim_title">Наведение на монитор</string>
+    <string name="aim_mode_hint">Совместите рамку с окнами камер на мониторе. Сдвиньте ползунок влево — обзор станет шире.</string>
+    <string name="aim_zoom">Масштаб: %1$.1f×</string>
+    <string name="aim_zoom_unsupported">Этот телефон не поддерживает изменение масштаба</string>
+    <string name="aim_widest">Максимально широко</string>
+    <string name="aim_done">Готово</string>
+    <string name="aim_camera">Камера</string>
+    <string name="aim_camera_item">%1$d° обзор</string>
+    <string name="aim_camera_wide">%1$d° · широкая</string>
+    <string name="aim_busy_duty">Во время дежурства наведение недоступно — сначала нажмите «Стоп».</string>
+    <string name="s_countdown">Отсчёт перед стартом</string>
+    <string name="s_countdown_off">без отсчёта</string>
+
+    <string name="schedule">График</string>
+    <string name="schedule_title">График смен</string>
+    <string name="on_shift_now">На смене: %1$s</string>
+    <string name="on_shift_none">По графику сейчас никого нет</string>
+    <string name="schedule_empty">Добавьте сотрудников — календарь покажет, кто в какие числа дежурит.</string>
+    <string name="staff">СОТРУДНИКИ</string>
+    <string name="add_employee">Добавить сотрудника</string>
+    <string name="edit_employee">Сотрудник</string>
+    <string name="last_name">Фамилия</string>
+    <string name="first_name">Имя</string>
+    <string name="middle_name">Отчество</string>
+    <string name="first_shift">Дата смены: %1$s</string>
+    <string name="first_shift_hint">Укажите любой день, когда сотрудник заступает на сутки — остальные смены рассчитаются сами.</string>
+    <string name="cycle">График</string>
+    <string name="cycle_1">Сутки через сутки</string>
+    <string name="cycle_2">Сутки через двое</string>
+    <string name="cycle_3">Сутки через трое</string>
+    <string name="cycle_4">Сутки через четверо</string>
+    <string name="save">Сохранить</string>
+    <string name="name_required">Введите фамилию или имя</string>
+    <string name="delete_employee_q">Удалить сотрудника %1$s из графика?</string>
+    <string name="employee_sub">%1$s · с %2$s</string>
+    <string name="shift_change">Пересменка: %1$s</string>
+    <string name="day_dialog_none">В этот день по графику никто не заступает.</string>
+    <string name="day_dialog_shift">Заступает в %1$s, сменяется %2$s в %1$s</string>
+    <string name="today">Сегодня</string>
 </resources>
